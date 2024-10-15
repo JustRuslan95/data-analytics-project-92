@@ -51,4 +51,50 @@ select
 from tab;
 --запрос на отчет с данными по выручке по каждому продавцу и дню недели, отсортрованных по дням недели с понедельника --
 
+    select
+        '16-25' as age_category,
+        COUNT(age) as age_count
+    from customers c 
+    where age >= 16 and age <=25
+
+    UNION 
+    
+    select
+        '26-40' as age_category,
+        COUNT(age) as age_count
+    from customers c 
+    where age >= 26 and age <=40
+
+    UNION 
+    
+    select
+        '40+' as age_category,
+        COUNT(age) as age_count
+    from customers c 
+    where age >= 40;
+ -- три запроса объединенных на отчет о количестве покупателей в разных возрастных группах: 16-25, 26-40 и 40+ --
+   
+   select 
+    to_char(s.sale_date, 'YYYY-MM') as selling_month,
+    COUNT(distinct s.customer_id) as total_customers,
+    FLOOR(SUM(s.quantity * p.price)) as income
+from sales s 
+inner join products p on p.product_id = s.product_id 
+group by selling_month
+order by selling_month;
+--запрос на получение данных по количеству уникальных покупателей и выручке, которую они принесли помесячно--
+
+select 
+    distinct(CONCAT(c.first_name, ' ', c.last_name)) as customer,
+    s.sale_date,
+    CONCAT(e.first_name, ' ', e.last_name) as seller
+from sales s 
+inner join products p on p.product_id = s.product_id
+inner join customers c on s.customer_id = c.customer_id 
+inner join employees e on s.sales_person_id = e.employee_id 
+where p.price = 0
+order by distinct c.customer_id;
+/*запрос на отчет о покупателях, первая покупка которых была в ходе проведения акций 
+(акционные товары отпускали со стоимостью равной 0), отсортированный по id покупателя
+ */
 
