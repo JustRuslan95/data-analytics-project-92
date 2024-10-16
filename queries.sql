@@ -71,7 +71,8 @@ from tab;
         '40+' as age_category,
         COUNT(age) as age_count
     from customers c 
-    where age >= 40;
+    where age >= 40
+    order by age_category;
  -- три запроса объединенных на отчет о количестве покупателей в разных возрастных группах: 16-25, 26-40 и 40+ --
    
    select 
