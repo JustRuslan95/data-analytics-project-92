@@ -71,7 +71,7 @@ from tab;
         '40+' as age_category,
         COUNT(age) as age_count
     from customers c 
-    where age >= 40
+    where age > 40
     order by age_category;
  -- три запроса объединенных на отчет о количестве покупателей в разных возрастных группах: 16-25, 26-40 и 40+ --
    
@@ -85,8 +85,8 @@ group by selling_month
 order by selling_month;
 --запрос на получение данных по количеству уникальных покупателей и выручке, которую они принесли помесячно--
 
-select 
-    distinct(CONCAT(c.first_name, ' ', c.last_name)) as customer,
+select DISTINCT ON (s.customer_id)
+    (CONCAT(c.first_name, ' ', c.last_name)) as customer,
     s.sale_date,
     CONCAT(e.first_name, ' ', e.last_name) as seller
 from sales s 
@@ -94,7 +94,7 @@ inner join products p on p.product_id = s.product_id
 inner join customers c on s.customer_id = c.customer_id 
 inner join employees e on s.sales_person_id = e.employee_id 
 where p.price = 0
-order by distinct c.customer_id;
+order by s.customer_id, s.sale_date;
 /*запрос на отчет о покупателях, первая покупка которых была в ходе проведения акций 
 (акционные товары отпускали со стоимостью равной 0), отсортированный по id покупателя
  */
